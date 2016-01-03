@@ -1,0 +1,87 @@
+<link rel="import" href="bower_components/polymer/polymer.html">
+<dom-module id="my-checkbox">
+<style>
+:host
+{
+	outline: none;
+};
+#shape
+{
+	border: 1px solid;
+	width: 13px;
+	height: 13px;
+	border-radius: 2px; 
+	display: inline-block;
+	cursor: pointer;
+	padding: 3px;
+	box-sizing: border-box;
+}
+
+input:focus + #shape
+{
+	border-color: blue;
+}
+
+#subshape
+{
+	width: 100%;
+	height: 100%;
+	cursor: pointer;
+}
+
+
+#value:checked + #shape #subshape
+{
+	background-color: green;
+}
+
+#value 
+{
+	width: 0px;
+	height: 0px;
+	float: left;
+	opacity: 0;
+}
+
+</style>
+<template>
+	<label>
+		<input type="checkbox" id="value" checked="{{checked::change}}"/>
+		<div id ="shape"><div id="subshape"></div></div>
+	</label>
+</template>
+<script>
+	Polymer({
+		is: 'my-checkbox',
+		properties: {
+			tabindex: String,
+			checked: Boolean
+		},
+
+		listeners: {
+			'value.change': 'onChange'
+		},
+
+		observers: [
+			'checkedChanged(checked)'
+		],
+
+		ready: function () {
+			if(this.tabindex == undefined) {
+				Polymer.dom(this).setAttribute('tabindex', '0');
+			}
+
+			Polymer.dom(this).setAttribute('aria-role', 'checkbox');
+		}, 
+
+			
+		checkedChanged: function ( checked ) {
+			Polymer.dom(this).setAttribute('aria-checked', this.checked ? 'true' : 'false');
+		},
+
+		onChange: function () {
+			this.fire('truc');
+		}
+	});
+</script>
+</dom-module>
